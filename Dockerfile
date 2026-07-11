@@ -18,5 +18,5 @@ COPY data/raw/ data/raw/
 # Expose the API port
 EXPOSE 8000
 
-# Start the FastAPI server
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start the FastAPI server using the dynamically assigned PORT (or fallback to 8000)
+CMD uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}

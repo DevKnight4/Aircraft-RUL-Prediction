@@ -70,9 +70,12 @@ export default function Prediction() {
   const [error, setError] = useState('');
   const [samples, setSamples] = useState([]);
 
+  // API configuration for dynamic deployment
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
   React.useEffect(() => {
-    // Fetch samples on load
-    axios.get('http://localhost:8000/sample-engines')
+    // Load sample engines from backend
+    axios.get(`${API_URL}/sample-engines`)
       .then(res => setSamples(res.data))
       .catch(err => console.error("Could not load samples:", err));
   }, []);
@@ -100,8 +103,8 @@ export default function Prediction() {
     setResult(null);
 
     try {
-      // Assuming FastAPI runs on 8000
-      const response = await axios.post('http://localhost:8000/predict', formData);
+      // Send request to backend using dynamic URL
+      const response = await axios.post(`${API_URL}/predict`, formData);
       setResult(response.data);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to connect to the prediction API.');
